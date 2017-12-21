@@ -122,8 +122,8 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 		
         //delay for setting up
         myRobot.sleep(2000);
-
-       //getting the robot to follow the black line
+	
+	//getting the robot to follow the black line
         do {
         	if (sensor.getColor() == ColorSensor.Color.BLACK) {
         		//Go Forwards
@@ -170,8 +170,9 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 					System.out.println("white");
 				}			
         	}	
-       } while (sensor.getColor() !=ColorSensor.Color.BLUE); 
-  
+	} while (sensor.getColor() !=ColorSensor.Color.BLUE); 
+	
+		
 		while (true) {
 			switch (command) {
 				case STOP:
@@ -216,8 +217,11 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 					break;
 				case CATCH:
 					label.setText("Catch");
-					cage.setSpeed(200); 
-					cage.forward();
+					while(touch.isTouched()==false){
+						cage.setSpeed(200); 
+						cage.forward();
+					}
+					horn.playTone(1500,200)
  					break;
  					
 				case RELEASE:
