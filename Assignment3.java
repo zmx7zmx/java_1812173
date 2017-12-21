@@ -22,7 +22,7 @@ import javax.swing.JMenuItem;
 public class Assignment3 extends JFrame implements Runnable, KeyListener, WindowListener, ActionListener {
 	
 	//defining the behavior of the program
-	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCHER, RCATCHER };
+	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCH, RELEASE};
 	private static final int DELAY_MS = 50;
 	
 	//make the window, text label and menu
@@ -74,17 +74,17 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 				command = Command.RIGHT;
 				break;
 			case java.awt.event.KeyEvent.VK_SPACE:
-				command = Command.CATCHER;
+				command = Command.CATCH;//engage the nick cage
 				break;
 			case java.awt.event.KeyEvent.VK_R:
-				command = Command.RCATCHER; // Reversing the Catcher
+				command = Command.RELEASE;//release the cage
 				break;
 			default:
 				command = Command.STOP;
 				break;
 		}
 	}
-    //and released
+	//and released
 	public void keyReleased(KeyEvent e) {
 		command = Command.STOP;
 	}
@@ -115,8 +115,9 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 		//declare the connected motors, sensors, and speaker
 		Motor leftMotor = myRobot.getLargeMotor(Motor.Port.A);
 		Motor rightMotor = myRobot.getLargeMotor(Motor.Port.B);
+		Motor cage = myRobot.getMediumMotor(Motor.Port.C);
 		ColorSensor sensor = myRobot.getColorSensor(Sensor.Port.S1);
-		Motor foot = myRobot.getLargeMotor(Motor.Port.C);
+		TouchSensor touch = myRobot.getTouchSensor(Sensor.Port.S2);
 		Speaker horn = myRobot.getSpeaker();
 		
         //delay for setting up
@@ -135,7 +136,7 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
         	}
         	else if (sensor.getColor() != ColorSensor.Color.BLACK) {
 				
-        		// Stop and Go Right
+        		//stop and go right
         		leftMotor.stop();
 				rightMotor.stop();
 				leftMotor.setSpeed(100);
@@ -177,29 +178,26 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 					label.setText("Stop");
 					leftMotor.stop();
 					rightMotor.stop();
-					foot.stop();
-					// put your code for stopping here
+					cage.stop();
+					//put your code for stopping here
 					
 					break;					
 				case FORWARD:
 					label.setText("Forward");
-					//Going forward
 					leftMotor.setSpeed(250);
 					rightMotor.setSpeed(250); 
 					leftMotor.forward();
 					rightMotor.forward();
-					//horn.playTone(1000, 200);
-					// put your code for going forwards here
+					//put your code for going forwards here
 					
 					break;					
 				case REVERSE:
 					label.setText("Reverse");
-					//Reverse
 					leftMotor.setSpeed(250);
 					rightMotor.setSpeed(250);
 					leftMotor.backward();                                            
 					rightMotor.backward();
-					// put your code for going backwards here
+					//put your code for going backwards here
 					
 					break;					
 				case LEFT:
@@ -211,22 +209,21 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 					break;
 				case RIGHT:
 					label.setText("Right");
-					//Going right      
 					leftMotor.setSpeed(200);
 					leftMotor.forward();
 					rightMotor.setSpeed(0);
 
 					break;
-				case CATCHER:
-					label.setText("CATCHER");
-					foot.setSpeed(200); 
-					foot.forward();
+				case CATCH:
+					label.setText("Catch");
+					cage.setSpeed(200); 
+					cage.forward();
  					break;
  					
-				case RCATCHER:
-					label.setText("R_CATCHER");
-					foot.setSpeed(200); 
-					foot.backward();
+				case RELEASE:
+					label.setText("Release");
+					cage.setSpeed(200); 
+					cage.backward();
  					break;
 			}
 			try {
