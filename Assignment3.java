@@ -1,13 +1,3 @@
-/**
-* Sheffield University Robot Football Controller
-* Guy Brown September 2008, amended Siobhan North 2014
-* Rewritten for EV3 robots SDN 2016
-* 
-* SCROLL DOWN TO THE BOTTOM OF THE PROGRAM
-* YOU DO NOT NEED TO UNDERSTAND (OR EDIT) ANYTHING APART FROM THE
-* MARKED SECTIONS OF THE PROGRAM
-*/
-
 /**Java Assignment 3
  * @authors Joshua Chew, Luke Fox, Daniel Porter, Mengxin Zhu
  */
@@ -29,19 +19,19 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-public class EV3football extends JFrame implements Runnable, KeyListener, WindowListener, ActionListener {
+public class Assignment3 extends JFrame implements Runnable, KeyListener, WindowListener, ActionListener {
 	
-	//Defining the behaviour of the prgram
+	//defining the behavior of the program
 	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCHER, RCATCHER };
 	private static final int DELAY_MS = 50;
 	
-	// Make the window, text label and menu
+	//make the window, text label and menu
 	private static final int FRAME_WIDTH = 400;
 	private static final int FRAME_HEIGHT = 200;
 	
 	private JLabel label = new JLabel("Stop",JLabel.CENTER);
 			
-	public EV3football() {
+	public Assignment3() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Quit");
 		JMenuItem menuItem = new JMenuItem("Really Quit?");
@@ -52,7 +42,7 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 		this.add(label, BorderLayout.CENTER);
 		label.setFont(new Font("SansSerif", Font.PLAIN, 48));
 		this.setBounds(0,0,FRAME_WIDTH,FRAME_HEIGHT);
-		this.setTitle("Sheffield Robot Football Controller");
+		this.setTitle("Robot A7 Controller");
 		this.addKeyListener(this);
 		this.addWindowListener(this);
 		this.setLocationRelativeTo(null);
@@ -60,15 +50,15 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 		this.setVisible(true);
 	}
 	
-	// Start the program	
+	//start the program	
 	private Command command = Command.STOP;	
 	private Robot myRobot = new Robot();	 
 	public static void main(String[] args) {
-		Thread t = new Thread(new EV3football());
+		Thread t = new Thread(new Assi());
 		t.start();
 	}
 
-	// Select the command corresponding to the key pressed	
+	//select the command corresponding to the key pressed	
 	public void keyPressed(KeyEvent e) {
 		switch ( e.getKeyCode()) {
 			case java.awt.event.KeyEvent.VK_UP:
@@ -107,7 +97,7 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 	public void windowIconified(WindowEvent e) {}
 	public void windowOpened(WindowEvent e) {}
 	
-	// handle the quit menu item	
+	//handle the quit menu item	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Really Quit?")) {
 			System.out.println("Closing Bluetooth");
@@ -121,24 +111,18 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 		myRobot.close();
 	}
 
-	/*
-	 * THIS IS THE ONLY PART OF THE PROGRAM THAT YOU NEED TO EDIT
-	 */
-
 	public void run() {
-		//This defines and names the two large Motors that turn the wheels
+		//declare the connected motors, sensors, and speaker
 		Motor leftMotor = myRobot.getLargeMotor(Motor.Port.A);
 		Motor rightMotor = myRobot.getLargeMotor(Motor.Port.B);
 		ColorSensor sensor = myRobot.getColorSensor(Sensor.Port.S1);
 		Motor foot = myRobot.getLargeMotor(Motor.Port.C);
 		Speaker horn = myRobot.getSpeaker();
 		
-		
-       //put your code to define other things here
-        // Delay for setting up
+        //delay for setting up
         myRobot.sleep(2000);
 
-       //Getting the robot to follow the black line
+       //getting the robot to follow the black line
         do {
         	if (sensor.getColor() == ColorSensor.Color.BLACK) {
         		//Go Forwards
@@ -183,22 +167,10 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 					myRobot.sleep(1000);
 					
 					System.out.println("white");
-				}
-					
-        	}
-			
+				}			
+        	}	
        } while (sensor.getColor() !=ColorSensor.Color.BLUE); 
-/*        
-        while (sensor.getColor() != ColorSensor.Color.BLACK) {
-        	    //Go Forwards
-        		leftMotor.setSpeed(200);
-        		rightMotor.setSpeed(200);
-        		leftMotor.forward();
-        		rightMotor.forward();
- 		
-        		System.out.println("Test");
-        } */
-       
+  
 		while (true) {
 			switch (command) {
 				case STOP:
@@ -256,15 +228,10 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 					foot.setSpeed(200); 
 					foot.backward();
  					break;
- 					
-
- 					
-
 			}
 			try {
 				Thread.sleep(DELAY_MS);
 			} catch (InterruptedException e) {};
 		}	
 	}
-
 }
