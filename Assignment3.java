@@ -217,11 +217,13 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 					break;
 				case CATCH:
 					label.setText("Catch");
+					cage.setSpeed(200); 
 					while(touch.isTouched()==false){
-						cage.setSpeed(200); 
 						cage.forward();
 					}
-					horn.playTone(1500,200)
+					horn.playTone(1500,200);
+					cage.stop();
+					label.setText("Caught");
  					break;
  					
 				case RELEASE:
