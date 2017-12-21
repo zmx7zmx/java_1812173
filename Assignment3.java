@@ -54,7 +54,7 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 	private Command command = Command.STOP;	
 	private Robot myRobot = new Robot();	 
 	public static void main(String[] args) {
-		Thread t = new Thread(new Assi());
+		Thread t = new Thread(new Assignment3());
 		t.start();
 	}
 
