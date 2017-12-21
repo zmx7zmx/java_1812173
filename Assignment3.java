@@ -1,13 +1,3 @@
-/**
-* Sheffield University Robot Football Controller
-* Guy Brown September 2008, amended Siobhan North 2014
-* Rewritten for EV3 robots SDN 2016
-* 
-* SCROLL DOWN TO THE BOTTOM OF THE PROGRAM
-* YOU DO NOT NEED TO UNDERSTAND (OR EDIT) ANYTHING APART FROM THE
-* MARKED SECTIONS OF THE PROGRAM
-*/
-
 /**Java Assignment 3
  * @authors Joshua Chew, Luke Fox, Daniel Porter, Mengxin Zhu
  */
@@ -29,19 +19,19 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-public class EV3football extends JFrame implements Runnable, KeyListener, WindowListener, ActionListener {
+public class Assignment3 extends JFrame implements Runnable, KeyListener, WindowListener, ActionListener {
 	
-	//Defining the behaviour of the prgram
-	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCHER, RCATCHER };
+	//defining the behavior of the program
+	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCH, RELEASE};
 	private static final int DELAY_MS = 50;
 	
-	// Make the window, text label and menu
+	//make the window, text label and menu
 	private static final int FRAME_WIDTH = 400;
 	private static final int FRAME_HEIGHT = 200;
 	
 	private JLabel label = new JLabel("Stop",JLabel.CENTER);
 			
-	public EV3football() {
+	public Assignment3() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Quit");
 		JMenuItem menuItem = new JMenuItem("Really Quit?");
@@ -52,7 +42,7 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 		this.add(label, BorderLayout.CENTER);
 		label.setFont(new Font("SansSerif", Font.PLAIN, 48));
 		this.setBounds(0,0,FRAME_WIDTH,FRAME_HEIGHT);
-		this.setTitle("Sheffield Robot Football Controller");
+		this.setTitle("Robot A7 Controller");
 		this.addKeyListener(this);
 		this.addWindowListener(this);
 		this.setLocationRelativeTo(null);
@@ -60,15 +50,15 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 		this.setVisible(true);
 	}
 	
-	// Start the program	
+	//start the program	
 	private Command command = Command.STOP;	
 	private Robot myRobot = new Robot();	 
 	public static void main(String[] args) {
-		Thread t = new Thread(new EV3football());
+		Thread t = new Thread(new Assignment3());
 		t.start();
 	}
 
-	// Select the command corresponding to the key pressed	
+	//select the command corresponding to the key pressed	
 	public void keyPressed(KeyEvent e) {
 		switch ( e.getKeyCode()) {
 			case java.awt.event.KeyEvent.VK_UP:
@@ -84,17 +74,17 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 				command = Command.RIGHT;
 				break;
 			case java.awt.event.KeyEvent.VK_SPACE:
-				command = Command.CATCHER;
+				command = Command.CATCH;//engage the nick cage
 				break;
 			case java.awt.event.KeyEvent.VK_R:
-				command = Command.RCATCHER; // Reversing the Catcher
+				command = Command.RELEASE;//release the cage
 				break;
 			default:
 				command = Command.STOP;
 				break;
 		}
 	}
-    //and released
+	//and released
 	public void keyReleased(KeyEvent e) {
 		command = Command.STOP;
 	}
@@ -107,7 +97,7 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 	public void windowIconified(WindowEvent e) {}
 	public void windowOpened(WindowEvent e) {}
 	
-	// handle the quit menu item	
+	//handle the quit menu item	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Really Quit?")) {
 			System.out.println("Closing Bluetooth");
@@ -121,24 +111,19 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 		myRobot.close();
 	}
 
-	/*
-	 * THIS IS THE ONLY PART OF THE PROGRAM THAT YOU NEED TO EDIT
-	 */
-
 	public void run() {
-		//This defines and names the two large Motors that turn the wheels
+		//declare the connected motors, sensors, and speaker
 		Motor leftMotor = myRobot.getLargeMotor(Motor.Port.A);
 		Motor rightMotor = myRobot.getLargeMotor(Motor.Port.B);
+		Motor cage = myRobot.getMediumMotor(Motor.Port.C);
 		ColorSensor sensor = myRobot.getColorSensor(Sensor.Port.S1);
-		Motor foot = myRobot.getLargeMotor(Motor.Port.C);
+		TouchSensor touch = myRobot.getTouchSensor(Sensor.Port.S2);
 		Speaker horn = myRobot.getSpeaker();
 		
-		
-       //put your code to define other things here
-        // Delay for setting up
+        //delay for setting up
         myRobot.sleep(2000);
-
-       
+	
+	//getting the robot to follow the black line
         do {
         	if (sensor.getColor() == ColorSensor.Color.BLACK) {
         		//Go Forwards
@@ -151,7 +136,7 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
         	}
         	else if (sensor.getColor() != ColorSensor.Color.BLACK) {
 				
-        		// Stop and Go Right
+        		//stop and go right
         		leftMotor.stop();
 				rightMotor.stop();
 				leftMotor.setSpeed(100);
@@ -183,51 +168,37 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 					myRobot.sleep(1000);
 					
 					System.out.println("white");
-				}
-					
-        	}
-			
-       } while (sensor.getColor() !=ColorSensor.Color.BLUE); 
-/*        
-        while (sensor.getColor() != ColorSensor.Color.BLACK) {
-        	    //Go Forwards
-        		leftMotor.setSpeed(200);
-        		rightMotor.setSpeed(200);
-        		leftMotor.forward();
-        		rightMotor.forward();
- 		
-        		System.out.println("Test");
-        } */
-       
+				}			
+        	}	
+	} while (sensor.getColor() !=ColorSensor.Color.BLUE); 
+	
+		
 		while (true) {
 			switch (command) {
 				case STOP:
 					label.setText("Stop");
 					leftMotor.stop();
 					rightMotor.stop();
-					foot.stop();
-					// put your code for stopping here
+					cage.stop();
+					//put your code for stopping here
 					
 					break;					
 				case FORWARD:
 					label.setText("Forward");
-					//Going forward
 					leftMotor.setSpeed(250);
 					rightMotor.setSpeed(250); 
 					leftMotor.forward();
 					rightMotor.forward();
-					//horn.playTone(1000, 200);
-					// put your code for going forwards here
+					//put your code for going forwards here
 					
 					break;					
 				case REVERSE:
 					label.setText("Reverse");
-					//Reverse
 					leftMotor.setSpeed(250);
 					rightMotor.setSpeed(250);
 					leftMotor.backward();                                            
 					rightMotor.backward();
-					// put your code for going backwards here
+					//put your code for going backwards here
 					
 					break;					
 				case LEFT:
@@ -239,32 +210,31 @@ public class EV3football extends JFrame implements Runnable, KeyListener, Window
 					break;
 				case RIGHT:
 					label.setText("Right");
-					//Going right      
 					leftMotor.setSpeed(200);
 					leftMotor.forward();
 					rightMotor.setSpeed(0);
 
 					break;
-				case CATCHER:
-					label.setText("CATCHER");
-					foot.setSpeed(200); 
-					foot.forward();
+				case CATCH:
+					label.setText("Catch");
+					cage.setSpeed(200); 
+					while(touch.isTouched()==false){
+						cage.forward();
+					}
+					horn.playTone(1500,200);
+					cage.stop();
+					label.setText("Caught");
  					break;
  					
-				case RCATCHER:
-					label.setText("R_CATCHER");
-					foot.setSpeed(200); 
-					foot.backward();
+				case RELEASE:
+					label.setText("Release");
+					cage.setSpeed(200); 
+					cage.backward();
  					break;
- 					
-
- 					
-
 			}
 			try {
 				Thread.sleep(DELAY_MS);
 			} catch (InterruptedException e) {};
 		}	
 	}
-
 }
