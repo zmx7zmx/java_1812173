@@ -22,7 +22,7 @@ import javax.swing.JMenuItem;
 public class followblackline extends JFrame implements Runnable, KeyListener, WindowListener, ActionListener {
 	
 	//defining the behavior of the program
-	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCH, RELEASE};
+	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCH, RELEASE, DANCE};
 	private static final int DELAY_MS = 50;
 	
 	//make the window, text label and menu
@@ -79,6 +79,9 @@ public class followblackline extends JFrame implements Runnable, KeyListener, Wi
 			case java.awt.event.KeyEvent.VK_R:
 				command = Command.RELEASE;//release the cage
 				break;
+			case java.awt.event.KeyEvent.VK_D:
+				command = Command.DANCE;//waggle dance
+				break;
 			default:
 				command = Command.STOP;
 				break;
@@ -124,9 +127,15 @@ public class followblackline extends JFrame implements Runnable, KeyListener, Wi
         myRobot.sleep(2000);
 	
 		//Code for following the black line
-		
+		int blueChecker = 0;
 		//Attempt 1.
-        do {
+          do {
+         	 if (sensor.getColor() == ColorSensor.Color.BLUE) {
+        		//Go Forwards
+        		 blueChecker ++;
+        		 System.out.println("blue");
+        	}
+         	 
         	if (sensor.getColor() == ColorSensor.Color.BLACK) {
         		//Go Forwards
         		leftMotor.setSpeed(100);
@@ -138,7 +147,7 @@ public class followblackline extends JFrame implements Runnable, KeyListener, Wi
         	}
         	else if (sensor.getColor() != ColorSensor.Color.BLACK) {
 				
-        		//stop and go right
+        		//stop and go right 
         		leftMotor.stop();
 				rightMotor.stop();
 				leftMotor.setSpeed(100);
@@ -152,36 +161,38 @@ public class followblackline extends JFrame implements Runnable, KeyListener, Wi
 					do {
 						leftMotor.stop();
 						rightMotor.stop();
-						leftMotor.setSpeed(100);
-						rightMotor.setSpeed(100);
+						leftMotor.setSpeed(150);
+						rightMotor.setSpeed(150);
 						leftMotor.forward();
 						rightMotor.forward();
 					
-						System.out.println("black");
+						System.out.println("black2");
 					    } while (sensor.getColor() == ColorSensor.Color.BLACK);
 				}
 				
 				//If there isn't a black line then turn left.
 				else if (sensor.getColor() != ColorSensor.Color.BLACK) {
-					//stop and go left  
+					//stop and go left 
 					leftMotor.stop();
 					rightMotor.stop();
 					rightMotor.setSpeed(100);
 					rightMotor.forward();
 					leftMotor.setSpeed(0);
 					
-					myRobot.sleep(1000);
+					myRobot.sleep(1200);
 					
 					System.out.println("white");
+				
 				}			
         	}	
-        } while (sensor.getColor() != ColorSensor.Color.BLUE); 
+        } while (blueChecker <3);   
 	
 	int white = 0;
 	int black = 0;
+
 	
 	//Attempt 2.
-        do {
+        /*  do {
         	if (sensor.getColor() == ColorSensor.Color.BLACK) {
         		do {
 						leftMotor.stop();
@@ -196,33 +207,36 @@ public class followblackline extends JFrame implements Runnable, KeyListener, Wi
         	}
         	//Error checking to find the black line.
         	if (sensor.getColor() != ColorSensor.Color.BLACK) {
-        		   do {
-        		   	   for (int i=300; i<=1500; i+=100) {
-        		
-						//stop and go left  
-						leftMotor.stop();
-						rightMotor.stop();
-						rightMotor.setSpeed(100);
-						rightMotor.forward();
-						leftMotor.setSpeed(0);
-						
-						myRobot.sleep(i);
-																
-						//stop and go right
-
-						leftMotor.stop();
-						rightMotor.stop();
-						leftMotor.setSpeed(100);
-						leftMotor.forward();
-						rightMotor.setSpeed(0);
-						
-						myRobot.sleep(2*i);
-       				
+        		   
+        		   	   for (int i=500; i<=2000; i+=400) {
+        		   	   	   do {
+								//stop and go left  
+								leftMotor.stop();
+								rightMotor.stop();
+								rightMotor.setSpeed(100);
+								rightMotor.forward();
+								leftMotor.setSpeed(0);
+								
+								myRobot.sleep(i);
+																		
+								//stop and go right
+		
+								leftMotor.stop();
+								rightMotor.stop();
+								leftMotor.setSpeed(100);
+								leftMotor.forward();
+								rightMotor.setSpeed(0);
+								
+								myRobot.sleep((int)(multiplier*i));
+								
+								System.out.println("white");
+								
+							  }  while (sensor.getColor() != ColorSensor.Color.BLACK);
         			    } 
         	 		
-        		    }  while (sensor.getColor() != ColorSensor.Color.BLACK);
+        		    
         	}
-	} while (sensor.getColor() != ColorSensor.Color.BLUE); 
+	} while (sensor.getColor() != ColorSensor.Color.BLUE);   */
 	//End of code for following black line
 	
 		
@@ -277,12 +291,37 @@ public class followblackline extends JFrame implements Runnable, KeyListener, Wi
 					horn.playTone(1500,200);
 					cage.stop();
 					label.setText("Caught");
- 					break;
- 					
+
+					break;
 				case RELEASE:
 					label.setText("Release");
 					cage.setSpeed(200); 
 					cage.backward();
+ 		
+					break;
+ 				case DANCE:
+					label.setText("Dance");
+					 for (int i=30; i<=140; i+=10) {
+						//stop and go left  
+						leftMotor.stop();
+						rightMotor.stop();
+						rightMotor.setSpeed(1000);
+						leftMotor.setSpeed(1000);
+						rightMotor.rotate(i);
+						leftMotor.rotate(-i);
+						
+						//myRobot.sleep(i);
+																
+						//stop and go right
+						leftMotor.stop();
+						rightMotor.stop();
+						leftMotor.setSpeed(1000);
+						rightMotor.setSpeed(1000);
+						leftMotor.rotate(i);
+						rightMotor.rotate(-i);
+												
+					 }
+					
  					break;
 			}
 			try {
