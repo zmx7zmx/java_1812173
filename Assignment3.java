@@ -21,13 +21,19 @@ import javax.swing.JMenuItem;
 
 public class Assignment3 extends JFrame implements Runnable, KeyListener, WindowListener, ActionListener {
 	
-	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCH, RELEASE, DANCE};
+	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCH, RELEASE, DANCE, TURBO};
 	private static final int DELAY_MS = 50;
 	
+	private static final int MOVE_SPEED = 300;
+	private static final int TURN_SPEED = 200;
+	private static final int CATCH_SPEED = 100;
+		
 	private static final int FRAME_WIDTH = 400;
 	private static final int FRAME_HEIGHT = 200;
 	
 	private JLabel label = new JLabel("Stop",JLabel.CENTER);
+	
+	
 			
 	public Assignment3() {
 		JMenuBar menuBar = new JMenuBar();
@@ -79,6 +85,9 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 				break;
 			case java.awt.event.KeyEvent.VK_D:
 				command = Command.DANCE;//waggle dance
+				break;
+			case java.awt.event.KeyEvent.VK_T:
+				command = Command.TURBO;
 				break;
 			default:
 				command = Command.STOP;
@@ -132,14 +141,14 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
         			System.out.println("blue " + blueChecker);
         		}
 				while (sensor.getColor() == ColorSensor.Color.BLACK) {
-					rightMotor.setSpeed(300);
+					rightMotor.setSpeed(MOVE_SPEED);
 					rightMotor.forward();
 					blueChecker = 0;
 				}
 				System.out.println(sensor.getColor());
 				rightMotor.stop();
 				while (sensor.getColor() == ColorSensor.Color.WHITE) {
-					leftMotor.setSpeed(300);
+					leftMotor.setSpeed(MOVE_SPEED);
 					leftMotor.forward();
 					blueChecker = 0;
 				}
@@ -160,8 +169,17 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 					break;					
 				case FORWARD:
 					label.setText("Forward");
-					leftMotor.setSpeed(250);
-					rightMotor.setSpeed(250); 
+					leftMotor.setSpeed(MOVE_SPEED);
+					rightMotor.setSpeed(MOVE_SPEED); 
+					leftMotor.forward();
+					rightMotor.forward();
+					//put your code for going forwards here
+					
+					break;					
+				case TURBO:
+					label.setText("Turbo");
+					leftMotor.setSpeed(2*MOVE_SPEED);
+					rightMotor.setSpeed(2*MOVE_SPEED); 
 					leftMotor.forward();
 					rightMotor.forward();
 					//put your code for going forwards here
@@ -169,8 +187,8 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 					break;					
 				case REVERSE:
 					label.setText("Reverse");
-					leftMotor.setSpeed(250);
-					rightMotor.setSpeed(250);
+					leftMotor.setSpeed(MOVE_SPEED);
+					rightMotor.setSpeed(MOVE_SPEED);
 					leftMotor.backward();                                            
 					rightMotor.backward();
 					//put your code for going backwards here
@@ -178,26 +196,26 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 					break;					
 				case LEFT:
 					label.setText("Left");
-					rightMotor.setSpeed(200);
+					rightMotor.setSpeed(TURN_SPEED);
 					rightMotor.forward();
 					leftMotor.setSpeed(0);
 
 					break;
 				case RIGHT:
 					label.setText("Right");
-					leftMotor.setSpeed(200);
+					leftMotor.setSpeed(TURN_SPEED);
 					leftMotor.forward();
 					rightMotor.setSpeed(0);
 
 					break;
 				case CATCH:
 					label.setText("Catch");
-					cage.setSpeed(200); 
+					cage.setSpeed(CATCH_SPEED); 
 					cage.backward();
 					break;
 				case RELEASE:
 					label.setText("Release");
-					cage.setSpeed(200); 
+					cage.setSpeed(CATCH_SPEED); 
 					cage.forward();
  		
 					break;
