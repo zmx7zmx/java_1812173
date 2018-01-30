@@ -126,18 +126,14 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 		//edge following
 		while (sensor.getColor() != ColorSensor.Color.BLUE){
 				while (sensor.getColor() == ColorSensor.Color.BLACK) {
-					leftMotor.setSpeed(50);
-					rightMotor.setSpeed(350);
-					leftMotor.forward();
+					rightMotor.setSpeed(300);
 					rightMotor.forward();
 				}
 				System.out.println(sensor.getColor());
 				rightMotor.stop();
 				while (sensor.getColor() == ColorSensor.Color.WHITE) {
-					leftMotor.setSpeed(350);
-					rightMotor.setSpeed(50);
+					leftMotor.setSpeed(300);
 					leftMotor.forward();
-					rightMotor.forward();
 				}
 				System.out.println(sensor.getColor());
 				leftMotor.stop();
