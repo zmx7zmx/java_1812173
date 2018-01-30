@@ -235,8 +235,8 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 						//stop and go right
 						leftMotor.stop();
 						rightMotor.stop();
-						leftMotor.setSpeed(1000);
-						rightMotor.setSpeed(1000);
+						leftMotor.setSpeed(3*MOVE_SPEED);
+						rightMotor.setSpeed(3*MOVE_SPEED);
 						leftMotor.rotate(i);
 						rightMotor.rotate(-i);
 					}
