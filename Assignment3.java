@@ -33,7 +33,6 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 	
 	private JLabel label = new JLabel("Stop",JLabel.CENTER);
 	
-	
 			
 	public Assignment3() {
 		JMenuBar menuBar = new JMenuBar();
@@ -56,7 +55,7 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 	
 	private Command command = Command.STOP;	
 	private static Robot myRobot = new Robot();	 
-		
+	
 	public static void main(String[] args) {
 		Thread t = new Thread(new Assignment3());
 		t.start();
@@ -87,7 +86,7 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 				command = Command.DANCE;//waggle dance
 				break;
 			case java.awt.event.KeyEvent.VK_T:
-				command = Command.TURBO;
+				command = Command.TURBO;//turbo boost
 				break;
 			default:
 				command = Command.STOP;
@@ -122,6 +121,7 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 	}
 
 	public void run() {
+	
 	Motor leftMotor = myRobot.getLargeMotor(Motor.Port.A);
 	Motor rightMotor = myRobot.getLargeMotor(Motor.Port.B);
 	Motor cage = myRobot.getMediumMotor(Motor.Port.C);
@@ -198,14 +198,16 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 					label.setText("Left");
 					rightMotor.setSpeed(TURN_SPEED);
 					rightMotor.forward();
-					leftMotor.setSpeed(0);
+					leftMotor.setSpeed(TURN_SPEED);
+					leftMotor.backward();
 
 					break;
 				case RIGHT:
 					label.setText("Right");
 					leftMotor.setSpeed(TURN_SPEED);
 					leftMotor.forward();
-					rightMotor.setSpeed(0);
+					rightMotor.setSpeed(TURN_SPEED);
+					rightMotor.backward();
 
 					break;
 				case CATCH:
