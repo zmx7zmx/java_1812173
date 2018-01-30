@@ -123,17 +123,25 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
         //delay for setting up
         myRobot.sleep(2000);
 		
+    
+        int blueChecker = 0;
 		//edge following
-		while (sensor.getColor() != ColorSensor.Color.BLUE){
+		while (blueChecker < 10){
+				if (sensor.getColor() == ColorSensor.Color.BLUE) {
+					blueChecker ++;
+        			System.out.println("blue " + blueChecker);
+        		}
 				while (sensor.getColor() == ColorSensor.Color.BLACK) {
 					rightMotor.setSpeed(300);
 					rightMotor.forward();
+					blueChecker = 0;
 				}
 				System.out.println(sensor.getColor());
 				rightMotor.stop();
 				while (sensor.getColor() == ColorSensor.Color.WHITE) {
 					leftMotor.setSpeed(300);
 					leftMotor.forward();
+					blueChecker = 0;
 				}
 				System.out.println(sensor.getColor());
 				leftMotor.stop();
