@@ -27,6 +27,7 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 	private static final int MOVE_SPEED = 300;
 	private static final int TURN_SPEED = 200;
 	private static final int CATCH_SPEED = 100;
+	private static final int BLUE_LIMIT = 10;
 		
 	private static final int FRAME_WIDTH = 400;
 	private static final int FRAME_HEIGHT = 200;
@@ -135,7 +136,7 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
     
         int blueChecker = 0;
 		//edge following
-		while (blueChecker < 10){
+		while (blueChecker < BLUE_LIMIT){
 				if (sensor.getColor() == ColorSensor.Color.BLUE) {
 					blueChecker ++;
         			System.out.println("blue " + blueChecker);
