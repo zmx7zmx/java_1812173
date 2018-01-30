@@ -21,11 +21,9 @@ import javax.swing.JMenuItem;
 
 public class Assignment3 extends JFrame implements Runnable, KeyListener, WindowListener, ActionListener {
 	
-	//defining the behavior of the program
-	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCH, RELEASE};
+	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCH, RELEASE, DANCE};
 	private static final int DELAY_MS = 50;
 	
-	//make the window, text label and menu
 	private static final int FRAME_WIDTH = 400;
 	private static final int FRAME_HEIGHT = 200;
 	
@@ -50,9 +48,9 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 		this.setVisible(true);
 	}
 	
-	//start the program	
 	private Command command = Command.STOP;	
-	private Robot myRobot = new Robot();	 
+	private static Robot myRobot = new Robot();	 
+		
 	public static void main(String[] args) {
 		Thread t = new Thread(new Assignment3());
 		t.start();
@@ -74,10 +72,13 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 				command = Command.RIGHT;
 				break;
 			case java.awt.event.KeyEvent.VK_SPACE:
-				command = Command.CATCH;//engage the nick cage
+				command = Command.CATCH;//engage the cage
 				break;
 			case java.awt.event.KeyEvent.VK_R:
 				command = Command.RELEASE;//release the cage
+				break;
+			case java.awt.event.KeyEvent.VK_D:
+				command = Command.DANCE;//waggle dance
 				break;
 			default:
 				command = Command.STOP;
@@ -112,66 +113,36 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 	}
 
 	public void run() {
-		//declare the connected motors, sensors, and speaker
-		Motor leftMotor = myRobot.getLargeMotor(Motor.Port.A);
-		Motor rightMotor = myRobot.getLargeMotor(Motor.Port.B);
-		Motor cage = myRobot.getMediumMotor(Motor.Port.C);
-		ColorSensor sensor = myRobot.getColorSensor(Sensor.Port.S1);
-		TouchSensor touch = myRobot.getTouchSensor(Sensor.Port.S2);
-		Speaker horn = myRobot.getSpeaker();
-		
+	Motor leftMotor = myRobot.getLargeMotor(Motor.Port.A);
+	Motor rightMotor = myRobot.getLargeMotor(Motor.Port.B);
+	Motor cage = myRobot.getMediumMotor(Motor.Port.C);
+	ColorSensor sensor = myRobot.getColorSensor(Sensor.Port.S1);
+	TouchSensor touch = myRobot.getTouchSensor(Sensor.Port.S2);
+	Speaker horn = myRobot.getSpeaker();
+	
         //delay for setting up
         myRobot.sleep(2000);
-	
-	//getting the robot to follow the black line
-        do {
-        	if (sensor.getColor() == ColorSensor.Color.BLACK) {
-        		//Go Forwards
-        		leftMotor.setSpeed(100);
-        		rightMotor.setSpeed(100);
-        		leftMotor.forward();
-        		rightMotor.forward();
-        		
-        		System.out.println("black");
-        	}
-        	else if (sensor.getColor() != ColorSensor.Color.BLACK) {
-				
-        		//stop and go right
-        		leftMotor.stop();
-				rightMotor.stop();
-				leftMotor.setSpeed(100);
-				leftMotor.forward();
-				rightMotor.setSpeed(0);
-
-				myRobot.sleep(500);
-				
-				if (sensor.getColor() == ColorSensor.Color.BLACK) {
-					do {
-						leftMotor.stop();
-						rightMotor.stop();
-						leftMotor.setSpeed(100);
-						rightMotor.setSpeed(100);
-						leftMotor.forward();
-						rightMotor.forward();
-					
-						System.out.println("black");
-					} while (sensor.getColor() == ColorSensor.Color.BLACK);
-				}
-				
-				else if (sensor.getColor() != ColorSensor.Color.BLACK) {
-					leftMotor.stop();
-					rightMotor.stop();
-					rightMotor.setSpeed(100);
+		
+		//edge following
+		while (sensor.getColor() != ColorSensor.Color.BLUE){
+				while (sensor.getColor() == ColorSensor.Color.BLACK) {
+					leftMotor.setSpeed(50);
+					rightMotor.setSpeed(350);
+					leftMotor.forward();
 					rightMotor.forward();
-					leftMotor.setSpeed(0);
-					
-					myRobot.sleep(1000);
-					
-					System.out.println("white");
-				}			
-        	}	
-	} while (sensor.getColor() !=ColorSensor.Color.BLUE); 
-	
+				}
+				System.out.println(sensor.getColor());
+				rightMotor.stop();
+				while (sensor.getColor() == ColorSensor.Color.WHITE) {
+					leftMotor.setSpeed(350);
+					rightMotor.setSpeed(50);
+					leftMotor.forward();
+					rightMotor.forward();
+				}
+				System.out.println(sensor.getColor());
+				leftMotor.stop();
+		}
+		System.out.println(sensor.getColor());
 		
 		while (true) {
 			switch (command) {
@@ -218,19 +189,35 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 				case CATCH:
 					label.setText("Catch");
 					cage.setSpeed(200); 
-					while(touch.isTouched()==false){
-						cage.forward();
-					}
-					horn.playTone(1500,200);
-					cage.stop();
-					label.setText("Caught");
- 					break;
- 					
+					cage.backward();
+					break;
 				case RELEASE:
 					label.setText("Release");
 					cage.setSpeed(200); 
-					cage.backward();
- 					break;
+					cage.forward();
+ 		
+					break;
+ 				case DANCE:
+					label.setText("Dance");
+					for (int i=30; i<=140; i+=10) {
+						//stop and go left  
+						leftMotor.stop();
+						rightMotor.stop();
+						rightMotor.setSpeed(1000);
+						leftMotor.setSpeed(1000);
+						rightMotor.rotate(i);
+						leftMotor.rotate(-i);
+																						
+						//stop and go right
+						leftMotor.stop();
+						rightMotor.stop();
+						leftMotor.setSpeed(1000);
+						rightMotor.setSpeed(1000);
+						leftMotor.rotate(i);
+						rightMotor.rotate(-i);
+					}
+					
+					break;
 			}
 			try {
 				Thread.sleep(DELAY_MS);
