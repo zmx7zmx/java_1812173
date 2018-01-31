@@ -1,10 +1,10 @@
 /**Java Assignment 3
- * @authors Joshua Chew, Luke Fox, Daniel Porter, Mengxin Zhu
+ * @authors Robot A7 Team - Joshua Chew, Luke Fox, Daniel Porter, Mengxin Zhu
  */
  
 import ShefRobot.*;
  
- public class Assignment3  {
+public class Assignment3  {
  	 
  	 // static constants, variables and methods
  	private static final int MOVE_SPEED = 300;
@@ -24,8 +24,13 @@ import ShefRobot.*;
 	private static Speaker horn = myRobot.getSpeaker(); 
  	 
  	// public method declarations
-	 
-	/* public static void checkColor() {
+	/** Checks to see if the robot has reached the blue centre by counting the
+	* number of blue's detected by the sensor. Once the counter reaches the max 
+	* limit for blue it will set the "reachedCentre" variable as true and
+	* break out of the line following code.
+	* @authors A7 Team
+	*/
+	public static void checkColor() {
 		for (int count: blueCount){
 			if (count == 1) {
 				System.out.println(count+"st Blue!");
@@ -44,8 +49,17 @@ import ShefRobot.*;
 			}
 		}
 		System.out.println(reachedCentre);
-	} */
-
+	} 
+	
+	/** Line following code for following the black line to the blue centre. 
+	* This will run as long as the "reachedCentre" variable is false (see above
+	checkColor method). The robot is following the edge of the black line. When
+	* it detects black it will turn left to the white edge and when it detects
+	* white it will turn right to the black edge. It will continue this zig-zag
+	* motion until it reaches the blue centre. There are commented println parts
+	* used for troubleshooting the sensor.
+	* @authors A7 Team
+	*/
  	public static void followLine() {
  		int blueChecker = 0;
 		//edge following
@@ -100,4 +114,4 @@ import ShefRobot.*;
  		Ev3football test = new Ev3football();
  		test.run();			
 	}
- }
+}
