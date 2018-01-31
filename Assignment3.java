@@ -50,7 +50,7 @@ import ShefRobot.*;
  		followLine();
  		myRobot.close();
  		
- 		EV3football test = new EV3football();
+ 		Ev3football test = new Ev3football();
  		test.run();
  		
  				
