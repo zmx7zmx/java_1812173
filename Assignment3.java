@@ -9,8 +9,12 @@ import ShefRobot.*;
  	// static constants, variables and methods
  	private static final int MOVE_SPEED = 300;
 	private static final int TURN_SPEED = 200;
-	private static final int CATCH_SPEED = 100;
-	private static final int BLUE_LIMIT = 10;
+	private static final int CATCH_SPEED = 100;	 
+  	private static final int BLUE_MAX = 10;
+	 
+	private static int blueCount = 0;
+	private static boolean reachedCentre = false;
+
  	private static Robot myRobot = new Robot();	 
 	private static Motor leftMotor = myRobot.getLargeMotor(Motor.Port.A);
 	private static Motor rightMotor = myRobot.getLargeMotor(Motor.Port.B);
@@ -20,6 +24,28 @@ import ShefRobot.*;
 	private static Speaker horn = myRobot.getSpeaker(); 
  	 
  	// public method declarations
+	 
+	public static void checkColor() {
+		for (int count: blueCount){
+			if (count == 1) {
+				System.out.println(count+"st Blue!");
+			}
+			if (count == 2){
+				System.out.println(count+"nd Blue!");
+			}
+			else if (count == 3){
+				System.out.println(count+"rd Blue!");
+			}
+			else if {count < BLUE_MAX)
+				System.out.println(count+"th Blue!");
+			}
+			else {
+				reachedCentre = true;
+			}
+		}
+		System.out.println(reachedCentre);
+	}
+
  	public static void followLine() {
  		int blueChecker = 0;
 		//edge following
