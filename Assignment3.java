@@ -5,8 +5,8 @@
 import ShefRobot.*;
  
  public class Assignment3  {
- 
- 	// static constants, variables and methods
+ 	 
+ 	 // static constants, variables and methods
  	private static final int MOVE_SPEED = 300;
 	private static final int TURN_SPEED = 200;
 	private static final int CATCH_SPEED = 100;	 
@@ -25,7 +25,7 @@ import ShefRobot.*;
  	 
  	// public method declarations
 	 
-	public static void checkColor() {
+	/* public static void checkColor() {
 		for (int count: blueCount){
 			if (count == 1) {
 				System.out.println(count+"st Blue!");
@@ -36,7 +36,7 @@ import ShefRobot.*;
 			else if (count == 3){
 				System.out.println(count+"rd Blue!");
 			}
-			else if {count < BLUE_MAX)
+			else if (count < BLUE_MAX)
 				System.out.println(count+"th Blue!");
 			}
 			else {
@@ -44,12 +44,12 @@ import ShefRobot.*;
 			}
 		}
 		System.out.println(reachedCentre);
-	}
+	} */
 
  	public static void followLine() {
  		int blueChecker = 0;
 		//edge following
-		while (blueChecker < BLUE_LIMIT){
+		while (blueChecker < BLUE_MAX){
 				if (sensor.getColor() == ColorSensor.Color.BLUE) {
 					blueChecker ++;
         			//System.out.println("blue " + blueChecker); for troubleshooting to check if sensor picks up blue on the line
@@ -71,19 +71,33 @@ import ShefRobot.*;
 		}
 		//System.out.println(sensor.getColor());for troubleshooting the colour sensor	
  	}
+ 	
+ 	
+/*  	public static void dance() {
+		for (int i=30; i<=140; i+=10) {
+			//stop and go left  
+			leftMotor.stop();
+			rightMotor.stop();
+			rightMotor.setSpeed(3*MOVE_SPEED);
+			leftMotor.setSpeed(3*MOVE_SPEED);
+			rightMotor.rotate(i);
+			leftMotor.rotate(-i);
+																			
+			//stop and go right
+			leftMotor.stop();
+			rightMotor.stop();
+			leftMotor.setSpeed(3*MOVE_SPEED);
+			rightMotor.setSpeed(3*MOVE_SPEED);
+			leftMotor.rotate(i);
+			rightMotor.rotate(-i);
+		}
+ 	} */
  	 	
  	public static void main(String[] args) {	
  		followLine();
  		myRobot.close();
  		
  		Ev3football test = new Ev3football();
- 		test.run();
- 		
- 				
- 		
- 			
+ 		test.run();			
 	}
- 	 
- 	 
- 	 
  }
