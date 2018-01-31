@@ -19,7 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-public class Assignment3 extends JFrame implements Runnable, KeyListener, WindowListener, ActionListener {
+public class Ev3football extends JFrame implements Runnable, KeyListener, WindowListener, ActionListener {
 	
 	enum Command {STOP, LEFT, RIGHT, FORWARD, REVERSE, CATCH, RELEASE, DANCE, TURBO};
 	private static final int DELAY_MS = 50;
@@ -35,7 +35,7 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 	private JLabel label = new JLabel("Stop",JLabel.CENTER);
 	
 			
-	public Assignment3() {
+	public Ev3football() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Quit");
 		JMenuItem menuItem = new JMenuItem("Really Quit?");
@@ -58,7 +58,7 @@ public class Assignment3 extends JFrame implements Runnable, KeyListener, Window
 	private static Robot myRobot = new Robot();	 
 	
 	public static void main(String[] args) {
-		Thread t = new Thread(new Assignment3());
+		Thread t = new Thread(new Ev3football());
 		t.start();
 	}
 
