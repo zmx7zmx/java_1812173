@@ -18,9 +18,6 @@ import ShefRobot.*;
 	private static ColorSensor sensor = myRobot.getColorSensor(Sensor.Port.S1);
 	private static TouchSensor touch = myRobot.getTouchSensor(Sensor.Port.S2);
 	private static Speaker horn = myRobot.getSpeaker(); 
-	
-	// instance variables
-	//private EV3football ev3football;
  	 
  	// public method declarations
  	public static void followLine() {
